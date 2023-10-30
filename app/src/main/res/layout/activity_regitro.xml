@@ -161,14 +161,37 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <Spinner
-                android:id="@+id/spnEnfermedades"
-                android:layout_gravity="center"
-                android:background="@drawable/et_border"
-                android:layout_width="300dp"
-                android:minHeight="48dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="5dp"
                 android:layout_marginBottom="15dp"
-                android:layout_height="wrap_content" />
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spnEnfermedades"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/et_border"
+                    android:layout_weight="1"
+                    android:minHeight="48dp" />
+
+                <View
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnAgregarEnfermedad"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/azul_oscuro"
+                    android:text="+"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <TextView
                 android:background="@drawable/et_border"
@@ -176,7 +199,7 @@
                 android:layout_gravity="center"
                 android:layout_width="370dp"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewStart"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:layout_marginBottom="15dp"
                 android:textSize="20sp" />
@@ -185,24 +208,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="En caso de tener alergia a algún \n ingresala en el siguiente apartado"
+                android:text="En caso de tener alergia a algún médicamento \n ingresala en el siguiente apartado"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/etAlergia"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/et_border"
-                android:ems="10"
-                android:hint="Nombre del médicamento"
-                android:inputType="text"
-                android:minHeight="48dp"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etAlergia"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/et_border"
+                    android:ems="10"
+                    android:hint="Nombre del médicamento"
+                    android:inputType="text"
+                    android:minHeight="48dp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnAgregarMedicamento"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/azul_oscuro"
+                    android:text="+"
+                    android:textSize="24dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <TextView
                 android:background="@drawable/et_border"
@@ -210,9 +254,45 @@
                 android:layout_gravity="center"
                 android:layout_width="370dp"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewStart"
+                android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCancelar"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/naranja"
+                    android:text="Cancelar"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/btnRegistrarse"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/azul_oscuro"
+                    android:text="Registrarse"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
         </LinearLayout>
 
