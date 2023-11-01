@@ -33,7 +33,7 @@
             android:background="@drawable/imgbtn_border"
             android:contentDescription="Historial"
             android:scaleType="fitCenter"
-            android:src="@drawable/baseline_pending_actions_24"
+            android:src="@drawable/ic_dashboard_black_24dp"
             app:tint="@color/azul_bajito" />
 
         <ImageButton
