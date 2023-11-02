@@ -46,7 +46,7 @@
     <ListView
         android:id="@+id/lvHstRecetas"
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="250dp"
         android:background="@drawable/et_border"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
@@ -72,19 +72,19 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.632" />
+        app:layout_constraintVertical_bias="0.605" />
 
     <ListView
         android:id="@+id/lvHstMedicamentos"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/et_border"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
+        android:background="@drawable/et_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.935" />
+        app:layout_constraintVertical_bias="0.89" />
 </androidx.constraintlayout.widget.ConstraintLayout>
