@@ -39,7 +39,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa tus nombres"
                 android:inputType="text"
@@ -53,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa tus apellidos"
                 android:inputType="text"
@@ -67,7 +71,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Fecha de nacimiento"
                 android:inputType="text"
@@ -93,7 +99,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa un número de télefono"
                 android:inputType="text"
@@ -107,7 +115,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa un correo electrónico"
                 android:inputType="text"
@@ -121,7 +131,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa una contraseña"
                 android:inputType="text"
@@ -132,11 +144,12 @@
             <Spinner
                 android:id="@+id/spnSexo"
                 android:layout_gravity="center"
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:layout_width="300dp"
-                android:minHeight="48dp"
                 android:layout_marginBottom="15dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="48dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -163,19 +176,19 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="5dp"
-                android:layout_marginBottom="15dp"
+                android:layout_height="70dp"
                 android:orientation="horizontal">
 
                 <Spinner
                     android:id="@+id/spnEnfermedades"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/et_border"
-                    android:layout_weight="1"
-                    android:minHeight="48dp" />
+                    android:background="@color/white"
+                    android:elevation="7sp"
+                    android:paddingLeft="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1" />
 
                 <View
                     android:layout_width="0px"
@@ -188,20 +201,24 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/azul_oscuro"
+                    android:layout_gravity="center"
                     android:text="+"
                     android:textSize="24sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
-                android:background="@drawable/et_border"
                 android:id="@+id/tvEnfermedades"
-                android:layout_gravity="center"
                 android:layout_width="370dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:minHeight="40dp"
+                android:paddingLeft="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:layout_marginBottom="15dp"
                 android:textSize="20sp" />
 
             <TextView
@@ -215,16 +232,19 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/etAlergia"
                     android:layout_width="300dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/et_border"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:elevation="7sp"
+                    android:paddingLeft="5dp"
                     android:ems="10"
                     android:hint="Nombre del médicamento"
                     android:inputType="text"
@@ -242,6 +262,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
+                    android:layout_gravity="center"
                     android:backgroundTint="@color/azul_oscuro"
                     android:text="+"
                     android:textSize="24dp"
@@ -249,11 +270,14 @@
             </LinearLayout>
 
             <TextView
-                android:background="@drawable/et_border"
+                android:background="@color/white"
+                android:elevation="7sp"
+                android:paddingLeft="5dp"
                 android:id="@+id/tvAlergiasMed"
                 android:layout_gravity="center"
                 android:layout_width="370dp"
                 android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -273,6 +297,7 @@
                     android:backgroundTint="@color/naranja"
                     android:text="Cancelar"
                     android:textColor="@color/black"
+
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

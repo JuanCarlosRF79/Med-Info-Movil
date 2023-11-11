@@ -6,6 +6,6 @@ import android.os.Bundle
 class crearReceta : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crear_receta)
+        setContentView(R.layout.activity_detalle_receta)
     }
 }

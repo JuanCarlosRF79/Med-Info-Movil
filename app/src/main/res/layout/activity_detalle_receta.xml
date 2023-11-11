@@ -4,84 +4,242 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="5dp"
-    tools:context=".DetalleRecetaActivity"
-    android:orientation="vertical">
+    android:background="@color/white"
+    tools:context=".crearReceta">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="Todos mis medicamentos"
+        android:text="Información medicamento"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="34sp"
+        android:layout_marginBottom="10dp"
+        android:textSize="26sp"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/azul_oscuro"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="0.2"
-            android:hint="Buscar por nombre"
-            android:textColor="@color/black" />
+        <ImageView
+            android:id="@+id/imgProd"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:minWidth="150dp"
+            android:minHeight="150dp"
+            app:srcCompat="@drawable/baseline_image_not_supported_24" />
 
         <ImageButton
-            android:id="@+id/btnFiltrarNombre"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/azul_oscuro"
-            android:contentDescription="Filtrar nombre"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:src="@drawable/baseline_search_24" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnLimpiarMed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_weight="1"
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.4"
+            android:background="@drawable/baseline_image_24"
             android:backgroundTint="@color/black"
-            android:onClick="limpiar"
-            android:text="Limpiar filtros"
-            android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:contentDescription="Cambiar imagen"
+            android:onClick="tomarFoto" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tvMensajeVacioMed"
+        android:id="@+id/tvNombreMed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No hay medicamentos registrados"
-        android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_marginBottom="7dp"
+        android:text="Nombre medicamento" />
+
+    <TextView
+        android:id="@+id/tvViaAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginBottom="10dp"
+        android:textSize="20sp"
+        android:text="Vía de administración: Oral" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
 
-        <ListView
-            android:id="@+id/lvHistorialMed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tvporcionesMed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="6 ml"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tvcada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="cada 8 horas"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tvduracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="durante 3 días"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/elegirDias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Días a repetir"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <CheckBox
+            android:id="@+id/cbTodosDias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Todos los días"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <CheckBox
+                android:id="@+id/cbLunes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Lunes"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cbMartes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Martes"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cbMiercoles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Miércoles"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cbJueves"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Jueves"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cbViernes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Viernes"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cbSabado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sábado"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/cbDomingo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Domingo"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+    <Button
+        android:id="@+id/btnHoraAlarma"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/azul_oscuro"
+        android:onClick="setHorarioAlarma"
+        android:text="Configurar hora de alarma"
+        android:textSize="20sp"
+        app:cornerRadius="0dp" />
+
+    <Button
+        android:id="@+id/btnProgramarAlarma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/azul_oscuro"
+        android:onClick="programarAlarma"
+        android:text="Programar alarma"
+        android:textSize="24sp"
+        app:cornerRadius="0dp" />
 
 </LinearLayout>
