@@ -30,7 +30,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imgProd"
+            android:id="@+id/imgMedicamento"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginBottom="10dp"
@@ -40,14 +40,14 @@
             app:srcCompat="@drawable/baseline_image_not_supported_24" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imgbtnTomarFoto"
             android:layout_width="50dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_weight="0.4"
             android:background="@drawable/baseline_image_24"
             android:backgroundTint="@color/black"
-            android:contentDescription="Cambiar imagen"
+            android:contentDescription="Tomar foto"
             android:onClick="tomarFoto" />
     </LinearLayout>
 
@@ -109,6 +109,12 @@
             android:textColor="@color/black" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginBottom="25dp"
+        android:background="@color/azul_oscuro"/>
 
     <LinearLayout
         android:id="@+id/elegirDias"

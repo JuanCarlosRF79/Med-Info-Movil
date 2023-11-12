@@ -28,6 +28,7 @@
             android:exported="false" />
         <activity
             android:name=".DetalleRecetaActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".HistorialRecetasActivity"
