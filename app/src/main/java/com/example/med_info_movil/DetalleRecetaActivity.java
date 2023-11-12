@@ -1,7 +1,12 @@
 package com.example.med_info_movil;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +14,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
 
+import com.example.med_info_movil.clases.NotificacionAlarma;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+
 
 public class DetalleRecetaActivity extends AppCompatActivity {
 
@@ -23,6 +35,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     private LinearLayout elegirDias;
     private int horaAlarma,minutoAlarma;
     private int diaSemana;
+    private ArrayList<Integer> arrayIDAlarma = new ArrayList<Integer>();
 
     private String[] opcionesSpn = new String[]{};
 
@@ -31,7 +44,6 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_receta);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
         btnHora = findViewById(R.id.btnHoraAlarma);
         cbTodosDias = findViewById(R.id.cbTodosDias);
@@ -54,6 +66,10 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Buscar si están los IDS de las alarmas y obtener el arreglo
+        SharedPreferences preferences = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+        if(preferences.contains("idAlarmas")) arrayIDAlarma=getArrayList("idAlarmas");
     }
 
     public void desactivarCheck(View view){
@@ -99,16 +115,44 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 minutoAlarma = i1;
             }
         },horaActual,minutoActual,true);
-        timePickerDialog.setTitle("Horario de alarma");
+        timePickerDialog.setTitle("Hora de la próxima dosis");
         timePickerDialog.show();
         }
 
         public void programarAlarma(View view) {
-        //A la hora de programar, revisar arreglo de días
-        // si tiene distintos días crear la misma alarma pero para cada día
+            //A la hora de programar, revisar arreglo de días
+            // si tiene distintos días crear la misma alarma pero para cada día
+            // ArrayList<Integer> alarmDays = new ArrayList<Integer>();
+            // alarmDays.add(Calendar.SATURDAY);
+            Calendar calender= Calendar.getInstance();
+            //calender.set(Calendar.DAY_OF_WEEK, weekNo);  //here pass week number
+            calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
+            calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
+            calender.set(Calendar.SECOND, 0);
+            calender.set(Calendar.MILLISECOND, 0);
 
-            ArrayList<Integer> alarmDays = new ArrayList<Integer>();
-            alarmDays.add(Calendar.SATURDAY);
+            /*Calendar now = Calendar.getInstance();
+            now.set(Calendar.SECOND, 0);
+            now.set(Calendar.MILLISECOND, 0);
+
+            if (calender.before(now)) {    //this condition is used for future reminder that means your reminder not fire for past time
+                calender.add(Calendar.DATE, 7);
+            }*/
+
+            final int _id = (int) System.currentTimeMillis();  //this id is used to set multiple alarms
+
+            //Guardar los id de las Alarmas para poder borrarlas
+            arrayIDAlarma.add(_id);
+
+            Intent intent = new Intent(this, NotificacionAlarma.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            //Repetrir cada semana 7 * 24 * 60 * 60 * 1000
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 , pendingIntent);
+
+            Toast.makeText(this, "Alarma programada"+horaAlarma+" "+minutoAlarma, Toast.LENGTH_SHORT).show();
         }
 
         public void ocultarDias(){
@@ -118,5 +162,23 @@ public class DetalleRecetaActivity extends AppCompatActivity {
             params.width = 0;
             params.height = 0;
         }
+
+    public void saveArrayList(ArrayList<Integer> list, String key){
+        SharedPreferences prefs = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
+
+    }
+
+    public ArrayList<Integer> getArrayList(String key){
+        SharedPreferences prefs = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<Integer>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
 
 }

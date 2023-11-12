@@ -125,15 +125,6 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
 
-        <CheckBox
-            android:id="@+id/cbTodosDias"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Todos los días"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -191,7 +182,7 @@
                 android:layout_weight="1"
                 android:text="Viernes"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <CheckBox
                 android:id="@+id/cbSabado"
@@ -200,7 +191,7 @@
                 android:layout_weight="1"
                 android:text="Sábado"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <CheckBox
                 android:id="@+id/cbDomingo"
@@ -209,7 +200,16 @@
                 android:layout_weight="1"
                 android:text="Domingo"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/cbTodosDias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Todos los días"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </LinearLayout>
