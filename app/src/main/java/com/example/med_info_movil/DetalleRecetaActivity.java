@@ -46,7 +46,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     private int horaAlarma,minutoAlarma, horaRepetir,diaSemana;
     private String imgEncoded;
     private ArrayList<Integer> arrayIDAlarma = new ArrayList<Integer>();
-    private String[] opcionesSpn = new String[]{};
+    private ArrayList<Integer> diasSeleccionados = new ArrayList<Integer>();
 
     private Bitmap bitmap;
     private byte[] bArray;
@@ -74,6 +74,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (cbTodosDias.isChecked()){
                     desactivarCheck(view);
+                    diasSeleccionados.clear();
                 }else if (!cbTodosDias.isChecked()){
                     activarCheck(view);
                 }
@@ -118,41 +119,56 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         }
 
         public void programarAlarma(View view) {
+            horaRepetir = 1;
+            //Si la alarma se va a repetir en días especificos, se entra en el if
+            if (diasSeleccionados.size()>0){
+                for (int i=0;diasSeleccionados.size()>i;i++){
+                    // Elementos predefinidos de la alarma
+                    final int _id = (int) System.currentTimeMillis();  //this id is used to set multiple alarms
+                    //Guardar los id de las Alarmas para poder borrarlas
+                    arrayIDAlarma.add(_id);
+                    Intent intent = new Intent(this, NotificacionAlarma.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    Calendar calender= Calendar.getInstance();
 
-        horaRepetir = 1;
-            //A la hora de programar, revisar arreglo de días
-            // si tiene distintos días crear la misma alarma pero para cada día
-            // ArrayList<Integer> alarmDays = new ArrayList<Integer>();
-            // alarmDays.add(Calendar.SATURDAY);
-            Calendar calender= Calendar.getInstance();
-            //calender.set(Calendar.DAY_OF_WEEK, weekNo);  //here pass week number
-            calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
-            calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
-            calender.set(Calendar.SECOND, 0);
-            calender.set(Calendar.MILLISECOND, 0);
+                    calender.set(Calendar.DAY_OF_WEEK, diasSeleccionados.get(i));  //here pass week number
+                    calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
+                    calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
+                    calender.set(Calendar.SECOND, 0);
+                    calender.set(Calendar.MILLISECOND, 0);
 
-            /*Calendar now = Calendar.getInstance();
-            now.set(Calendar.SECOND, 0);
-            now.set(Calendar.MILLISECOND, 0);
+                    Calendar now = Calendar.getInstance();
+                    now.set(Calendar.SECOND, 0);
+                    now.set(Calendar.MILLISECOND, 0);
+                    if (calender.before(now)) {    //this condition is used for future reminder that means your reminder not fire for past time
+                        calender.add(Calendar.DATE, 7);
+                    }
 
-            if (calender.before(now)) {    //this condition is used for future reminder that means your reminder not fire for past time
-                calender.add(Calendar.DATE, 7);
-            }*/
+                    //Repetrir cada semana 7 * 24 * 60 * 60 * 1000
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 * 60 * 24 * 7 , pendingIntent);
+                    Toast.makeText(this, "Alarma programada"+diasSeleccionados.get(i), Toast.LENGTH_SHORT).show();
+                }
+            }else  if (diasSeleccionados.size()==0){
 
-            final int _id = (int) System.currentTimeMillis();  //this id is used to set multiple alarms
+                // Elementos predefinidos de la alarma
+                final int _id = (int) System.currentTimeMillis();  //this id is used to set multiple alarms
+                //Guardar los id de las Alarmas para poder borrarlas
+                arrayIDAlarma.add(_id);
 
-            //Guardar los id de las Alarmas para poder borrarlas
-            arrayIDAlarma.add(_id);
+                Intent intent = new Intent(this, NotificacionAlarma.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                Calendar calender= Calendar.getInstance();
 
-            Intent intent = new Intent(this, NotificacionAlarma.class);
+                calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
+                calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
+                calender.set(Calendar.SECOND, 0);
+                calender.set(Calendar.MILLISECOND, 0);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            //Repetrir cada semana 7 * 24 * 60 * 60 * 1000
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 * 60 * horaRepetir , pendingIntent);
-
-            Toast.makeText(this, "Alarma programada"+horaAlarma+" "+minutoAlarma, Toast.LENGTH_SHORT).show();
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 * 60 * horaRepetir , pendingIntent);
+                Toast.makeText(this, "Alarma programada"+horaAlarma+" "+minutoAlarma, Toast.LENGTH_SHORT).show();
+            }
         }
 
         //Funciones para manejar imagenes
@@ -223,7 +239,36 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         params.height = 0;
     }
 
-    public void saveArrayList(ArrayList<Integer> list, String key){
+    public void guardarDia(View view){
+        CheckBox cbApoyo = findViewById(view.getId());
+        int dia = convertirDia(cbApoyo.getText().toString());;
+
+        if(cbApoyo.isChecked()){
+            diasSeleccionados.add(dia);
+        }else{
+            diasSeleccionados.remove(Integer.valueOf(dia));
+        }
+    }
+
+    private int convertirDia(String dia){
+        if (dia.equals("Lunes")){
+            return Calendar.MONDAY;
+        }else if (dia.equals("Martes")){
+            return Calendar.TUESDAY;
+        }else if (dia.equals("Miércoles")) {
+            return Calendar.WEDNESDAY;
+        }else if (dia.equals("Jueves")) {
+            return Calendar.THURSDAY;
+        }else if (dia.equals("Viernes")) {
+            return Calendar.FRIDAY;
+        }else if (dia.equals("Sábado")) {
+            return Calendar.SATURDAY;
+        }else{
+            return Calendar.SUNDAY;
+        }
+    }
+
+    private void saveArrayList(ArrayList<Integer> list, String key){
         SharedPreferences prefs = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
@@ -233,7 +278,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<Integer> getArrayList(String key){
+    private ArrayList<Integer> getArrayList(String key){
         SharedPreferences prefs = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString(key, null);
