@@ -128,15 +128,17 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                     //Guardar los id de las Alarmas para poder borrarlas
                     arrayIDAlarma.add(_id);
                     Intent intent = new Intent(this, NotificacionAlarma.class);
+                    intent.putExtra("Prueba","Alarma dia especifico");
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     Calendar calender= Calendar.getInstance();
 
-                    calender.set(Calendar.DAY_OF_WEEK, diasSeleccionados.get(i));  //here pass week number
                     calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
                     calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
                     calender.set(Calendar.SECOND, 0);
                     calender.set(Calendar.MILLISECOND, 0);
+                    calender.set(Calendar.DAY_OF_WEEK, diasSeleccionados.get(i));  //here pass week number
+
 
                     Calendar now = Calendar.getInstance();
                     now.set(Calendar.SECOND, 0);
@@ -147,7 +149,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
 
                     //Repetrir cada semana 7 * 24 * 60 * 60 * 1000
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 * 60 * 24 * 7 , pendingIntent);
-                    Toast.makeText(this, "Alarma programada"+diasSeleccionados.get(i), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Alarma programada", Toast.LENGTH_SHORT).show();
                 }
             }else  if (diasSeleccionados.size()==0){
 
@@ -157,6 +159,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 arrayIDAlarma.add(_id);
 
                 Intent intent = new Intent(this, NotificacionAlarma.class);
+                intent.putExtra("Prueba","Alarma repetible");
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Calendar calender= Calendar.getInstance();
@@ -167,7 +170,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 calender.set(Calendar.MILLISECOND, 0);
 
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 * 60 * horaRepetir , pendingIntent);
-                Toast.makeText(this, "Alarma programada"+horaAlarma+" "+minutoAlarma, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Alarma programada", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -190,7 +193,9 @@ public class DetalleRecetaActivity extends AppCompatActivity {
 
             //Llenar con información los textos
             txtMensaje.setText(titulo);
-            imgMuestra.setImageBitmap(bMap);
+            if (bMap!=null) {
+                imgMuestra.setImageBitmap(bMap);
+            }
 
             //Construir la vista
             builder.setView(dialogView);

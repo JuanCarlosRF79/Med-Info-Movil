@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -23,31 +24,35 @@ import com.example.med_info_movil.R;
 
 public class NotificacionAlarma extends BroadcastReceiver {
     private final static String CHANNEL_ID = "MEDINFO"; //constante para canal de notificación
-    private final static int NOTIFICATION_ID = 3; //Identificador de notificación
-    private String titulo, extra;
+    private String titulo;
+    private int extra;
     private PendingIntent pendingIntentSi, pendingIntentNo;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        extra = intent.getIntExtra("Prueba",0);
+        Toast.makeText(context, ""+extra, Toast.LENGTH_SHORT).show();
         setPendingIntentSi(context);
         setPendingIntentNo(context);
         crearCanalNotificacion(context);
         crearNotificacion(context);
+        extra = 0;
     }
 
     public void crearNotificacion(Context context){
         //Instancia para generar la notificación, especificando el contexto de la aplicación
         //y el canal de comunicación
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+        int id = (int) System.currentTimeMillis();
 
         //Caracteristicas a incluir en la notificación
         builder.setSmallIcon(R.drawable.baseline_notifications_active_24)
-                .setContentTitle("Prueba brutal")
+                .setContentTitle(titulo)
                 .setContentText("Hora de la siguiente toma")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setVibrate(new long[]{1000, 1000, 1000, 1000})
-                .setDefaults(Notification.DEFAULT_SOUND);
-
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setAutoCancel(true);
         //Especifica la Activity que aparecen en la notificación
         builder.setContentIntent(pendingIntentSi);
 
@@ -60,7 +65,7 @@ public class NotificacionAlarma extends BroadcastReceiver {
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
+        notificationManagerCompat.notify(id, builder.build());
     }
 
     private void setPendingIntentNo(Context context) {
@@ -74,7 +79,7 @@ public class NotificacionAlarma extends BroadcastReceiver {
 
     private void setPendingIntentSi(Context context) {
         Intent intent = new Intent( context, DetalleRecetaActivity.class);
-        intent.putExtra("extra",extra);
+        intent.putExtra("idMedicamento",extra);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(DetalleRecetaActivity.class);
@@ -90,7 +95,7 @@ public class NotificacionAlarma extends BroadcastReceiver {
 
             //Instancia para gestionar el canal y el servicio de la notificación
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,name,
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_HIGH);
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(notificationChannel);

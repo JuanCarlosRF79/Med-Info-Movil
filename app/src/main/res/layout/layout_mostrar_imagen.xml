@@ -20,6 +20,6 @@
         android:id="@+id/imgMuestra"
         android:layout_width="350dp"
         android:layout_height="350dp"
-        android:background="@drawable/baseline_image_not_supported_24" />
+        android:src="@drawable/baseline_image_not_supported_24" />
 
 </LinearLayout>
