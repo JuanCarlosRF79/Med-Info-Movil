@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -28,6 +29,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.med_info_movil.clases.NotificacionAlarma;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
@@ -35,19 +42,27 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 
+import cz.msebera.android.httpclient.Header;
 
 
 public class DetalleRecetaActivity extends AppCompatActivity {
 
+    //Elemento grádficos
     private Button btnHora;
     private CheckBox cbTodosDias,cbLunes,cbMartes,cbMiercoles,cbJueves,cbViernes,cbSabado,cbDomingo;
     private LinearLayout elegirDias;
     private ImageView imgnMedicamento;
-    private int horaAlarma,minutoAlarma, horaRepetir,diaSemana;
+    private TextView tvNombreMed,tvViaAdmin,tvPorcionesMed,tvCada,tvDuracion;
+
+    //Elementos extras
+    private int horaAlarma,minutoAlarma, diaSemana;
     private String imgEncoded;
     private ArrayList<Integer> arrayIDAlarma = new ArrayList<Integer>();
     private ArrayList<Integer> diasSeleccionados = new ArrayList<Integer>();
 
+    //Elementos de BD
+    private String idDetalleReceta;
+    private int horaRepetir;
     private Bitmap bitmap;
     private byte[] bArray;
 
@@ -67,7 +82,13 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         cbSabado = findViewById(R.id.cbSabado);
         cbDomingo = findViewById(R.id.cbDomingo);
         elegirDias = findViewById(R.id.elegirDias);
+
         imgnMedicamento = findViewById(R.id.imgMedicamento);
+        tvNombreMed = findViewById(R.id.tvNombreMed);
+        tvPorcionesMed = findViewById(R.id.tvporcionesMed);
+        tvViaAdmin = findViewById(R.id.tvViaAdmin);
+        tvCada = findViewById(R.id.tvcada);
+        tvDuracion = findViewById(R.id.tvduracion);
 
         cbTodosDias.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +115,68 @@ public class DetalleRecetaActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String titulo = "Imagen de prueba";
                 mostrarImagen(view,titulo,bitmap);
+            }
+        });
+
+        llenarDetalle();
+    }
+
+    public void llenarDetalle(){
+        Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
+        idDetalleReceta = "1";
+        String url ="http://192.168.0.105:8000/api/detalleReceta/"+idDetalleReceta;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(url, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(statusCode == 200){
+                        String x = new String(responseBody);
+
+                        if (!x.equals("0")) {
+                            try {
+                                JSONArray contacto = new JSONArray(new String(responseBody));
+                                JSONObject object = contacto.getJSONObject(0);
+
+                                tvNombreMed.setText(object.getString("nombreMedicamento").toString());
+                                //tvViaAdmin.setText("");
+                                tvPorcionesMed.setText(object.getString("porcionesMedicamento").toString());
+                                tvCada.setText("Cada "+object.getString("cadaCuanto").toString());
+
+                                if (!object.getString("duracionTratamiento").toString().equals("null")){
+                                    tvDuracion.setText(object.getString("duracionTratamiento").toString());
+                                }else {
+                                    tvDuracion.setText("");
+                                }
+
+                                if (!object.getString("imgMedicamento").toString().equals("null")){
+                                    
+                                    byte[] bytes = Base64.getDecoder().decode(object.getString("imgMedicamento"));
+                                    bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+
+                                    imgnMedicamento.setImageBitmap(bitmap);
+                                }
+
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        } else{
+                            Toast.makeText(DetalleRecetaActivity.this, "Error al " +
+                                    "llenar información.", Toast.LENGTH_SHORT).show();
+                        }
+
+                }else {
+                    Toast.makeText(DetalleRecetaActivity.this, "Error al llenar la información", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(DetalleRecetaActivity.this, "Fallo al llenar la información", Toast.LENGTH_SHORT).show();
             }
         });
     }
