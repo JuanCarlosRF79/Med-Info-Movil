@@ -26,6 +26,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.med_info_movil.clases.NotificacionAlarma;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,6 +47,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -61,7 +69,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     private ArrayList<Integer> diasSeleccionados = new ArrayList<Integer>();
 
     //Elementos de BD
-    private String idDetalleReceta;
+    private String idDetalleReceta, nombreMed;
     private int horaRepetir;
     private Bitmap bitmap;
     private byte[] bArray;
@@ -71,6 +79,9 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_receta);
+        if (getIntent().hasExtra("idDetalle")){
+            idDetalleReceta = getIntent().getStringExtra("idDetalle");
+        }
 
         btnHora = findViewById(R.id.btnHoraAlarma);
         cbTodosDias = findViewById(R.id.cbTodosDias);
@@ -113,72 +124,11 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         imgnMedicamento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String titulo = "Imagen de prueba";
-                mostrarImagen(view,titulo,bitmap);
+                mostrarImagen(view,nombreMed,bitmap);
             }
         });
 
         llenarDetalle();
-    }
-
-    public void llenarDetalle(){
-        Toast.makeText(this, "Hola", Toast.LENGTH_SHORT).show();
-        idDetalleReceta = "1";
-        String url ="http://192.168.0.105:8000/api/detalleReceta/"+idDetalleReceta;
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(url, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if(statusCode == 200){
-                        String x = new String(responseBody);
-
-                        if (!x.equals("0")) {
-                            try {
-                                JSONArray contacto = new JSONArray(new String(responseBody));
-                                JSONObject object = contacto.getJSONObject(0);
-
-                                tvNombreMed.setText(object.getString("nombreMedicamento").toString());
-                                //tvViaAdmin.setText("");
-                                tvPorcionesMed.setText(object.getString("porcionesMedicamento").toString());
-                                tvCada.setText("Cada "+object.getString("cadaCuanto").toString());
-
-                                if (!object.getString("duracionTratamiento").toString().equals("null")){
-                                    tvDuracion.setText(object.getString("duracionTratamiento").toString());
-                                }else {
-                                    tvDuracion.setText("");
-                                }
-
-                                if (!object.getString("imgMedicamento").toString().equals("null")){
-                                    
-                                    byte[] bytes = Base64.getDecoder().decode(object.getString("imgMedicamento"));
-                                    bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-
-                                    imgnMedicamento.setImageBitmap(bitmap);
-                                }
-
-
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-
-                        } else{
-                            Toast.makeText(DetalleRecetaActivity.this, "Error al " +
-                                    "llenar información.", Toast.LENGTH_SHORT).show();
-                        }
-
-                }else {
-                    Toast.makeText(DetalleRecetaActivity.this, "Error al llenar la información", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(DetalleRecetaActivity.this, "Fallo al llenar la información", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 
@@ -202,7 +152,6 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         }
 
         public void programarAlarma(View view) {
-            horaRepetir = 1;
             //Si la alarma se va a repetir en días especificos, se entra en el if
             if (diasSeleccionados.size()>0){
                 for (int i=0;diasSeleccionados.size()>i;i++){
@@ -211,7 +160,8 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                     //Guardar los id de las Alarmas para poder borrarlas
                     arrayIDAlarma.add(_id);
                     Intent intent = new Intent(this, NotificacionAlarma.class);
-                    intent.putExtra("Prueba","Alarma dia especifico");
+                    intent.putExtra("nombreMed", nombreMed);
+                    intent.putExtra("idDetalle", idDetalleReceta);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     Calendar calender= Calendar.getInstance();
@@ -242,7 +192,8 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 arrayIDAlarma.add(_id);
 
                 Intent intent = new Intent(this, NotificacionAlarma.class);
-                intent.putExtra("Prueba","Alarma repetible");
+                intent.putExtra("nombreMed", nombreMed);
+                intent.putExtra("idDetalle", idDetalleReceta);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Calendar calender= Calendar.getInstance();
@@ -314,7 +265,106 @@ public class DetalleRecetaActivity extends AppCompatActivity {
             imgEncoded = Base64.getEncoder().encodeToString(byteArray);
 
             imgnMedicamento.setImageBitmap(bitmap);
+            actualizarImg();
         }
+    }
+
+    public void llenarDetalle(){
+        idDetalleReceta = "1";
+
+        String url ="http://192.168.0.105:8000/api/detalleReceta/"+idDetalleReceta;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(url, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if(statusCode == 200){
+                    String x = new String(responseBody);
+
+                    if (!x.equals("0")) {
+                        try {
+                            JSONArray contacto = new JSONArray(new String(responseBody));
+                            JSONObject object = contacto.getJSONObject(0);
+
+                            nombreMed = object.getString("nombreMedicamento").toString();
+                            tvNombreMed.setText("Medicamento: "+nombreMed);
+                            //tvViaAdmin.setText("");
+                            tvPorcionesMed.setText(object.getString("porcionesMedicamento").toString());
+
+                            String fechas1[] = object.getString("cadaCuanto").split(" ");
+                            horaRepetir = Integer.valueOf(fechas1[0]);
+
+                            tvCada.setText("Cada "+object.getString("cadaCuanto").toString());
+
+                            if (!object.getString("duracionTratamiento").toString().equals("null")){
+                                tvDuracion.setText(object.getString("duracionTratamiento").toString());
+                            }else {
+                                tvDuracion.setText("");
+                            }
+
+                            if (!object.getString("imgMedicamento").toString().equals("null")){
+
+                                byte[] bytes = Base64.getDecoder().decode(object.getString("imgMedicamento"));
+                                bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+
+                                imgnMedicamento.setImageBitmap(bitmap);
+                            }
+
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    } else{
+                        Toast.makeText(DetalleRecetaActivity.this, "Error al " +
+                                "llenar información.", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                    Toast.makeText(DetalleRecetaActivity.this, "Error al llenar la información", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(DetalleRecetaActivity.this, "Fallo al llenar la información", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void actualizarImg(){
+        String url = "http://192.168.0.105:8000/api/detalleReceta/updateImg";
+
+        RequestQueue queue = Volley.newRequestQueue(DetalleRecetaActivity.this);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(DetalleRecetaActivity.this, "Imagén actualizada", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(DetalleRecetaActivity.this, "Ha ocurrido un error = " + error, Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                // Crear un mapa para asignar los valores del post
+                Map<String, String> params = new HashMap<String, String>();
+
+                // Asignar los valores con sus claves
+                    params.put("idDetalleReceta", idDetalleReceta);
+                    params.put("imgMedicamento", imgEncoded);
+
+                // Devolvemos los parametros
+                return params;
+            }
+        };
+        // Hacer una solicitud JSON
+        queue.add(request);
     }
 
     //   Funciones de apoyo ========================================================================

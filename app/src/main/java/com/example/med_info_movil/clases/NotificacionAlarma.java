@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -24,19 +23,18 @@ import com.example.med_info_movil.R;
 
 public class NotificacionAlarma extends BroadcastReceiver {
     private final static String CHANNEL_ID = "MEDINFO"; //constante para canal de notificación
-    private String titulo;
-    private int extra;
+    private String titulo = "";
+    private String idDetalle;
     private PendingIntent pendingIntentSi, pendingIntentNo;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        extra = intent.getIntExtra("Prueba",0);
-        Toast.makeText(context, ""+extra, Toast.LENGTH_SHORT).show();
+        idDetalle = intent.getStringExtra("idDetalle");
+        titulo = intent.getStringExtra("nombreMed");
         setPendingIntentSi(context);
         setPendingIntentNo(context);
         crearCanalNotificacion(context);
         crearNotificacion(context);
-        extra = 0;
     }
 
     public void crearNotificacion(Context context){
@@ -79,7 +77,7 @@ public class NotificacionAlarma extends BroadcastReceiver {
 
     private void setPendingIntentSi(Context context) {
         Intent intent = new Intent( context, DetalleRecetaActivity.class);
-        intent.putExtra("idMedicamento",extra);
+        intent.putExtra("idDetalle",idDetalle);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(DetalleRecetaActivity.class);
