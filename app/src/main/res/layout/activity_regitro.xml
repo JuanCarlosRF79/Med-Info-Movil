@@ -101,11 +101,11 @@
                 android:layout_marginBottom="15dp"
                 android:background="@color/white"
                 android:elevation="7sp"
-                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa un número de télefono"
-                android:inputType="text"
+                android:inputType="number"
                 android:minHeight="48dp"
+                android:paddingLeft="5dp"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -133,11 +133,11 @@
                 android:layout_marginBottom="15dp"
                 android:background="@color/white"
                 android:elevation="7sp"
-                android:paddingLeft="5dp"
                 android:ems="10"
                 android:hint="Ingresa una contraseña"
-                android:inputType="text"
+                android:inputType="text|textPassword"
                 android:minHeight="48dp"
+                android:paddingLeft="5dp"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -313,6 +313,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:backgroundTint="@color/azul_oscuro"
+                    android:onClick="registrar"
                     android:text="Registrarse"
                     android:textColor="@color/white"
                     android:textSize="20sp"

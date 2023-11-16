@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     public fun irMenu(view:View){
-        var intent:Intent = Intent(this,DetalleRecetaActivity::class.java)
+        var intent:Intent = Intent(this,RegitroActivity::class.java)
         startActivity(intent)
         finish()
     }
