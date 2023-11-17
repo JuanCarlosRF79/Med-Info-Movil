@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:context=".EncargadoLoginActivity">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ingresar como encargado"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="34sp"
+        android:layout_marginBottom="100dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etCodigo"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:elevation="20sp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="5dp"
+        android:hint="Código para compartir perfil" />
+
+    <EditText
+        android:id="@+id/etNombreEncargado"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:elevation="20sp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="5dp"
+        android:hint="Tu nombre completo" />
+
+    <EditText
+        android:id="@+id/etNumCorreo"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:elevation="20sp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="5dp"
+        android:hint="Número de teléfono / Correo" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:onClick="volver"
+        android:text="Volver"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnIngresarEncargado"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/azul_oscuro"
+        android:onClick="ingresar"
+        android:text="Ingresar"
+        android:textSize="24sp" />
+</LinearLayout>
