@@ -3,6 +3,7 @@ package com.example.med_info_movil
 import android.Manifest
 import android.content.ContextParams
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +19,14 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 
 class loginActivity : AppCompatActivity() {
 
     private val REQUEST_CALL_PHONE = 1
     private var usuario:String = ""
     private var contrasena:String = ""
+    private var ip:String =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +36,9 @@ class loginActivity : AppCompatActivity() {
         val editTextUsuario = findViewById<EditText>(R.id.gCorreo)
         val editTextContraseña = findViewById<EditText>(R.id.gContra)
         val buttonLogin = findViewById<Button>(R.id.buttonLogin)
+
+        var preferences = getSharedPreferences("medinfo.dat", MODE_PRIVATE)
+        ip = preferences.getString("ip", ip).toString()
 
         buttonLogin.setOnClickListener {
 
@@ -75,15 +81,33 @@ class loginActivity : AppCompatActivity() {
     }
 
     public fun iniciarSesion(){
-        val url:String = "http://192.168.0.105:8000/api/paciente/insertar"
+        val url:String = "http://$ip:8000/api/usuario/login"
         val queue:RequestQueue = Volley.newRequestQueue(this)
 
         var request = object : StringRequest(Request.Method.POST,url,
             Response.Listener { response ->
 
+                var intent = Intent(this,MenuPrincipal::class.java)
+                Toast.makeText(this, "Bienvenid@", Toast.LENGTH_SHORT).show()
+
+                var objeto = JSONObject(response)
+                var info = objeto.getJSONObject("info");
+
+                var prefernces = getSharedPreferences("medinfo.dat", MODE_PRIVATE)
+                var editor = prefernces.edit()
+
+                if (objeto.has("idEncargado")){
+                    editor.putInt("idEncargado",objeto.getInt("idEncargado"))
+                    editor.putInt("permisos",objeto.getInt("permisos"))
+                }
+                editor.putInt("idPaciente",info.getInt("idPaciente"));
+                editor.apply()
+
+                startActivity(intent)
+
             },
             Response.ErrorListener { error ->
-
+                Toast.makeText(this, "Ha ocurrido un error $error", Toast.LENGTH_SHORT).show()
             }){
             override fun getParams(): Map<String, String>? {
                 var params = HashMap<String, String>()
@@ -101,13 +125,11 @@ class loginActivity : AppCompatActivity() {
     public fun encargado(view:View){
         var intent = Intent(this,EncargadoLoginActivity::class.java)
         startActivity(intent)
-        finish()
     }
 
     public fun registrar(view:View){
         var intent = Intent(this,RegitroActivity::class.java)
         startActivity(intent)
-        finish()
     }
 
 }

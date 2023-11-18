@@ -78,9 +78,11 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
         android:layout_gravity="center"
         android:layout_marginBottom="50dp"
+        android:onClick="registrar"
         android:text="Registrarme"
         android:textColor="@color/black"
         android:textSize="20sp" />

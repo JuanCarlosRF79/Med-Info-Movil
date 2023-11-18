@@ -29,6 +29,7 @@ import java.util.Map;
 public class EncargadoLoginActivity extends AppCompatActivity {
     private EditText etNombre,etCodigo,etCorreo;
     private Button btnIngresar;
+    private String ip="";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -40,16 +41,17 @@ public class EncargadoLoginActivity extends AppCompatActivity {
         etCodigo = findViewById(R.id.etCodigo);
         etCorreo = findViewById(R.id.etNumCorreo);
 
+        SharedPreferences preferences = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+        ip = preferences.getString("ip",ip);
     }
 
     public void volver(View view){
         Intent intent = new Intent(this, loginActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void ingresar(View view){
-        String url = "http://192.168.0.105:8000/api/encargado/insertar";
+        String url = "http://"+ip+":8000/api/encargado/insertar";
 
         RequestQueue queue = Volley.newRequestQueue(EncargadoLoginActivity.this);
 

@@ -69,7 +69,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     private ArrayList<Integer> diasSeleccionados = new ArrayList<Integer>();
 
     //Elementos de BD
-    private String idDetalleReceta, nombreMed;
+    private String idDetalleReceta, nombreMed, ip="";
     private int horaRepetir;
     private Bitmap bitmap;
     private byte[] bArray;
@@ -116,6 +116,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         //Buscar si están los IDS de las alarmas y obtener el arreglo
         SharedPreferences preferences = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
         if(preferences.contains("idAlarmas")) arrayIDAlarma=getArrayList("idAlarmas");
+        ip = preferences.getString("ip",ip);
 
         //Llenar imagen en caso de tenerla
         if(bitmap!=null){ imgnMedicamento.setImageBitmap(bitmap); }
@@ -272,7 +273,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     public void llenarDetalle(){
         idDetalleReceta = "1";
 
-        String url ="http://192.168.0.105:8000/api/detalleReceta/"+idDetalleReceta;
+        String url ="http://"+ip+":8000/api/detalleReceta/"+idDetalleReceta;
 
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -335,7 +336,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     }
 
     public void actualizarImg(){
-        String url = "http://192.168.0.105:8000/api/detalleReceta/updateImg";
+        String url = "http://"+ip+":8000/api/detalleReceta/updateImg";
 
         RequestQueue queue = Volley.newRequestQueue(DetalleRecetaActivity.this);
 

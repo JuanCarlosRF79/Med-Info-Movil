@@ -66,7 +66,7 @@ public class RegitroActivity extends AppCompatActivity {
             "Masculino","Femenino"
     };
 
-    private String fechaNac;
+    private String fechaNac,ip="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +98,9 @@ public class RegitroActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter;
         spnSexo.setAdapter(adapter = new ArrayAdapter<String>(RegitroActivity.this, android.R.layout.simple_spinner_dropdown_item, sexoInfo));
         spnEnfermedades.setAdapter(adapter = new ArrayAdapter<String>(RegitroActivity.this, android.R.layout.simple_spinner_dropdown_item, enfermedadesCronicas.obtenerEnfermedades()));
+
+        SharedPreferences preferences = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+        ip = preferences.getString("ip",ip);
 
         btnEnfermedad.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +171,7 @@ public class RegitroActivity extends AppCompatActivity {
     }
 
     public void registrar(View view){
-        String url = "http://192.168.0.105:8000/api/paciente/insertar";
+        String url = "http://"+ip+":8000/api/paciente/insertar";
 
         RequestQueue queue = Volley.newRequestQueue(RegitroActivity.this);
 
