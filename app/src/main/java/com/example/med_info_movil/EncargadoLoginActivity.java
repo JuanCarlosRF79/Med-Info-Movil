@@ -2,6 +2,7 @@ package com.example.med_info_movil;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +60,18 @@ public class EncargadoLoginActivity extends AppCompatActivity {
                     JSONObject object = new JSONObject(response);
 
                     Toast.makeText(EncargadoLoginActivity.this, "Bienvenid@", Toast.LENGTH_SHORT).show();
+
+                    SharedPreferences preferences = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+
+                    editor.putInt("idEncargado", object.getInt("idEncargado"));
+                    editor.putInt("idPaciente", object.getInt("idPaciente"));
+                    editor.apply();
+
+                    Intent intent = new Intent(EncargadoLoginActivity.this, MenuPrincipal.class);
+                    startActivity(intent);
+                    finish();
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

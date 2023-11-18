@@ -262,16 +262,18 @@
                 android:orientation="horizontal">
 
 
-                <ImageButton
-                    android:id="@+id/imageButton4"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/btnCerrarSesion"
+                    android:layout_width="120dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:background="@drawable/imgbtn_border"
                     android:backgroundTint="@color/naranja"
                     android:contentDescription="Cerrar sesión"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/baseline_logout_24" />
+                    android:src="@drawable/baseline_logout_24"
+                    android:text="Cerrar sesión"
+                    android:textSize="20sp"
+                    app:cornerRadius="0dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -280,7 +282,7 @@
 
                 <Button
                     android:id="@+id/btnAceptar"
-                    android:layout_width="30dp"
+                    android:layout_width="120dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/azul_oscuro"

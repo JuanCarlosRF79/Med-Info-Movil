@@ -2,6 +2,7 @@ package com.example.med_info_movil;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -24,6 +25,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.med_info_movil.clases.enfermedadesCronicas;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -171,7 +175,23 @@ public class RegitroActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(RegitroActivity.this, "Usuario registrado", Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject object = new JSONObject(response);
+                    Toast.makeText(RegitroActivity.this, "Bienvenid@", Toast.LENGTH_SHORT).show();
+
+                    SharedPreferences preferences = getSharedPreferences("medinfo.dat",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+
+                    editor.putInt("idPaciente", object.getInt("idPaciente"));
+                    editor.apply();
+
+                    Intent intent = new Intent(RegitroActivity.this, MenuPrincipal.class);
+                    startActivity(intent);
+                    finish();
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
