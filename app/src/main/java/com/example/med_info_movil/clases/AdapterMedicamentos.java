@@ -20,6 +20,12 @@ public class AdapterMedicamentos extends BaseAdapter {
     private LayoutInflater inflater;
     private formatoFecha formatofecha = new formatoFecha();
 
+    public AdapterMedicamentos (Context context, JSONArray array){
+        this.context = context;
+        this.array = array;
+        this.inflater = LayoutInflater.from(context);
+    }
+
     @Override
     public int getCount() {
         return array.length();
@@ -40,19 +46,19 @@ public class AdapterMedicamentos extends BaseAdapter {
         view = inflater.inflate(R.layout.listview_medicamento, null);
 
         TextView tvNombre = (TextView) view.findViewById(R.id.tvNombreMedicamentoLV);
-        TextView tvPorcion = (TextView) view.findViewById(R.id.tvInicioRecetaLV);
-        TextView tvCada = (TextView) view.findViewById(R.id.tvFinRecetaLV);
-        TextView tvDuracion = (TextView) view.findViewById(R.id.tvEstadoRecetaLV);
-        TextView tvVia = (TextView) view.findViewById(R.id.tvIDRecetaLV);
+        TextView tvPorcion = (TextView) view.findViewById(R.id.tvporcionesMedLV);
+        TextView tvCada = (TextView) view.findViewById(R.id.tvcadaLV);
+        TextView tvDuracion = (TextView) view.findViewById(R.id.tvduracionLV);
+        TextView tvVia = (TextView) view.findViewById(R.id.tvViaAdminLV);
 
         try{
             JSONObject object = new JSONObject(array.getString(i));
 
             tvNombre.setText(object.getString("nombreMedicamento"));
             tvPorcion.setText(object.getString("porcionesMedicamento"));
-            tvCada.setText(object.getString("cadaCuanto"));
+            tvCada.setText("Cada "+object.getString("cadaCuanto"));
 
-            if (object.getString("duracionTratamiento")!="null"){
+            if (!object.isNull("duracionTratamiento")){
                 tvDuracion.setText(object.getString("duracionTratamiento"));
             }else tvDuracion.setVisibility(view.INVISIBLE);
 

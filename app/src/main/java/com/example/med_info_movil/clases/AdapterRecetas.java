@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.example.med_info_movil.R;
 
 import org.json.JSONArray;
@@ -47,7 +47,7 @@ public class AdapterRecetas extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.listview_receta, null);
 
-        TextView tvMedicamentos = (TextView) view.findViewById(R.id.tvNombreMedicamentoLV);
+        TextView tvMedicamentos = (TextView) view.findViewById(R.id.tvMedicamentosRecetaLV);
         TextView tvInicio = (TextView) view.findViewById(R.id.tvInicioRecetaLV);
         TextView tvFin = (TextView) view.findViewById(R.id.tvFinRecetaLV);
         TextView tvEstado = (TextView) view.findViewById(R.id.tvEstadoRecetaLV);

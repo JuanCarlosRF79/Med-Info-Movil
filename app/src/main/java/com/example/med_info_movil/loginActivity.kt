@@ -20,6 +20,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.concurrent.timerTask
 
 class loginActivity : AppCompatActivity() {
 
@@ -58,6 +61,17 @@ class loginActivity : AppCompatActivity() {
         buttonCall.setOnClickListener {
             makePhoneCall()
         }
+
+        var intent = Intent(this,MenuPrincipal::class.java)
+        Timer().schedule(timerTask {
+            if (preferences.contains("idPaciente")){
+                startActivity(intent)
+                finish()
+            }
+        },2000)
+
+
+
     }
 
     private fun makePhoneCall() {
