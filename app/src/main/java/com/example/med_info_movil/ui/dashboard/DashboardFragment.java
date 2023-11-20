@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.med_info_movil.DetalleRecetaActivity;
 import com.example.med_info_movil.HistorialMedicoActivity;
 import com.example.med_info_movil.HistorialRecetasActivity;
 import com.example.med_info_movil.R;
@@ -65,7 +66,13 @@ public class DashboardFragment extends Fragment {
         lvDetalles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                hstDetalles(view);
+                try {
+                    Intent intent = new Intent(view.getContext(), DetalleRecetaActivity.class);
+                    intent.putExtra("idDetalle",detalles.getJSONObject(i).getString("idDetalleReceta"));
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
             } });
 
         lvRecetas.setOnItemClickListener(new AdapterView.OnItemClickListener() {

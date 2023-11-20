@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HistorialMedicoActivity"
     android:padding="5dp"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <TextView

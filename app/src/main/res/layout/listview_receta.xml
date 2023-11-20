@@ -33,7 +33,6 @@
                 android:text="Activa"
                 android:textAlignment="textEnd"
                 android:textAllCaps="true"
-                android:textColor="@color/azul_oscuro"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

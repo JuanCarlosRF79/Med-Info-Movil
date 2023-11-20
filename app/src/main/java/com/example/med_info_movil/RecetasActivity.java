@@ -48,7 +48,7 @@ public class RecetasActivity extends AppCompatActivity {
     private ListView lvDetalles;
     private ImageView imgReceta;
     private String idReceta, imgEncoded;
-    private String ip="";
+    private String ip="",estado;
     private JSONArray detalles;
     private formatoFecha formatofecha = new formatoFecha();
     private Bitmap bitmap;
@@ -91,6 +91,7 @@ public class RecetasActivity extends AppCompatActivity {
                 try {
                     Intent intent = new Intent(view.getContext(), DetalleRecetaActivity.class);
                     intent.putExtra("idDetalle",detalles.getJSONObject(i).getString("idDetalleReceta"));
+                    intent.putExtra("estado",estado);
                     startActivity(intent);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -116,17 +117,19 @@ public class RecetasActivity extends AppCompatActivity {
                     JSONObject receta = object.getJSONObject("receta");
                     detalles = object.getJSONArray("detalles");
 
+                    estado = receta.getString("estadoReceta");
+
                     AdapterMedicamentos adapterMedicamentos = new AdapterMedicamentos(RecetasActivity.this,detalles);
                     lvDetalles.setAdapter(adapterMedicamentos);
 
                     tvID.setText("Receta #"+receta.getString("idReceta"));
 
-                    if (receta.getString("estadoReceta")=="Activo"){
+                    if (receta.getString("estadoReceta").equals("Activo")){
                         tvEstado.setText("Activo");
-                        tvEstado.setTextColor(R.color.azul_oscuro);
-                    }else if (receta.getString("estadoReceta")=="Inactivo"){
+                        tvEstado.setTextColor(getResources().getColor(R.color.azul_oscuro,null));
+                    }else if (receta.getString("estadoReceta").equals("Inactivo")){
                         tvEstado.setText("Inactivo");
-                        tvEstado.setTextColor(R.color.naranja);
+                        tvEstado.setTextColor(getResources().getColor(R.color.naranja,null));
                     }
 
                     tvNombrePac.setText("Paciente: \n"+paciente.getString("nombrePaciente")+

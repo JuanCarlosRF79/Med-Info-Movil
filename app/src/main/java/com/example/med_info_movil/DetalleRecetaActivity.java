@@ -41,7 +41,6 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +59,7 @@ import cz.msebera.android.httpclient.Header;
 public class DetalleRecetaActivity extends AppCompatActivity {
 
     //Elemento grádficos
-    private Button btnHora;
+    private Button btnHora, btnProgramar;
     private CheckBox cbTodosDias,cbLunes,cbMartes,cbMiercoles,cbJueves,cbViernes,cbSabado,cbDomingo;
     private LinearLayout elegirDias;
     private ImageView imgnMedicamento;
@@ -88,6 +87,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         }
 
         btnHora = findViewById(R.id.btnHoraAlarma);
+        btnProgramar = findViewById(R.id.btnProgramarAlarma);
         cbTodosDias = findViewById(R.id.cbTodosDias);
         cbLunes = findViewById(R.id.cbLunes);
         cbMartes = findViewById(R.id.cbMartes);
@@ -104,6 +104,14 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         tvViaAdmin = findViewById(R.id.tvViaAdmin);
         tvCada = findViewById(R.id.tvcada);
         tvDuracion = findViewById(R.id.tvduracion);
+
+        if (getIntent().hasExtra("estado")){
+            if (getIntent().getStringExtra("estado").equals("Inactivo")){
+                elegirDias.setVisibility(View.INVISIBLE);
+                btnProgramar.setVisibility(View.INVISIBLE);
+                btnHora.setVisibility(View.INVISIBLE);
+            }
+        }
 
         cbTodosDias.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,8 +302,14 @@ public class DetalleRecetaActivity extends AppCompatActivity {
 
                     if (!x.equals("0")) {
                         try {
-                            JSONArray contacto = new JSONArray(new String(responseBody));
-                            JSONObject object = contacto.getJSONObject(0);
+                            JSONObject respuesta = new JSONObject(new String(responseBody));
+                            JSONObject object = respuesta.getJSONObject("detalle");
+
+                            if (respuesta.getString("estado").equals("Inactivo")){
+                                elegirDias.setVisibility(View.INVISIBLE);
+                                btnProgramar.setVisibility(View.INVISIBLE);
+                                btnHora.setVisibility(View.INVISIBLE);
+                            }
 
                             nombreMed = object.getString("nombreMedicamento").toString();
                             tvNombreMed.setText("Medicamento: "+nombreMed);

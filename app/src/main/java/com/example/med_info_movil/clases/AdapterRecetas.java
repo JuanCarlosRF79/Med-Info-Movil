@@ -56,7 +56,7 @@ public class AdapterRecetas extends BaseAdapter {
         try{
             JSONObject object = new JSONObject(array.getString(i));
 
-            tvIdReceta.setText("Receta #"+(i+1));
+            tvIdReceta.setText("Receta #"+object.getString("idReceta"));
             tvMedicamentos.setText(object.getString( "nombreMedicamento") );
             tvInicio.setText("Inicio tratamiento: "+formatofecha.obtenerFecha( object.getString("inicioReceta") ));
 
@@ -68,12 +68,12 @@ public class AdapterRecetas extends BaseAdapter {
                 tvFin.setWidth(0);
             }
 
-            if (object.getString("estadoReceta")=="Activo"){
+            if (object.getString("estadoReceta").equals("Activo")){
                 tvEstado.setText("Activo");
-                tvEstado.setTextColor(R.color.azul_oscuro);
-            }else if (object.getString("estadoReceta")=="Inactivo"){
+                tvEstado.setTextColor(view.getResources().getColor(R.color.azul_oscuro,null));
+            }else if (object.getString("estadoReceta").equals("Inactivo")){
                 tvEstado.setText("Inactivo");
-                tvEstado.setTextColor(R.color.naranja);
+                tvEstado.setTextColor(view.getResources().getColor(R.color.naranja,null));
             }
 
         }catch (JSONException e){
