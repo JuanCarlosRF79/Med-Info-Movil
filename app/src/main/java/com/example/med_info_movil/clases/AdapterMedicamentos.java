@@ -62,6 +62,11 @@ public class AdapterMedicamentos extends BaseAdapter {
                 tvDuracion.setText(object.getString("duracionTratamiento"));
             }else tvDuracion.setVisibility(view.INVISIBLE);
 
+            if (!object.isNull("viaAdministracion")){
+                if (object.getInt("viaAdministracion")==1)tvVia.setText("Vía de administración: Oral");
+                if (object.getInt("viaAdministracion")==2)tvVia.setText("Vía de administración: Subcutánea");
+                if (object.getInt("viaAdministracion")==3)tvVia.setText("Vía de administración: Inhalatoria");
+            }
 
         }catch (JSONException e){
             throw new RuntimeException(e);

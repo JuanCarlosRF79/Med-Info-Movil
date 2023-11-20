@@ -1,10 +1,12 @@
 package com.example.med_info_movil.ui.home;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,7 +24,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.med_info_movil.DetalleRecetaActivity;
 import com.example.med_info_movil.R;
+import com.example.med_info_movil.RecetasActivity;
 import com.example.med_info_movil.clases.AdapterMedicamentos;
 import com.example.med_info_movil.clases.AdapterRecetas;
 import com.example.med_info_movil.databinding.FragmentHomeBinding;
@@ -44,7 +48,7 @@ public class HomeFragment extends Fragment {
     private Button btn911,btnFamiliar;
     private TextView tvVacio;
     private String ip="";
-    private int idReceta;
+    private String idReceta;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +64,27 @@ public class HomeFragment extends Fragment {
         ip = preferences.getString("ip",ip);
 
         llenarReceta();
+
+        lvDetalles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                try {
+                    Intent intent = new Intent(view.getContext(), DetalleRecetaActivity.class);
+                    intent.putExtra("idDetalle",detalles.getJSONObject(i).getString("idDetalleReceta"));
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            } });
+
+        lvReceta.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(view.getContext(), RecetasActivity.class);
+                intent.putExtra("idReceta",idReceta);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -87,7 +112,7 @@ public class HomeFragment extends Fragment {
                     JSONArray recetas = respuesta.getJSONArray("receta");
 
                     detalles = respuesta.getJSONArray("detalles");
-                    idReceta = recetas.getJSONObject(0).getInt("idReceta");
+                    idReceta = recetas.getJSONObject(0).getString("idReceta");
 
                     AdapterMedicamentos adapterMedicamentos = new AdapterMedicamentos(view.getContext(),detalles);
                     lvDetalles.setAdapter(adapterMedicamentos);

@@ -2,6 +2,8 @@ package com.example.med_info_movil;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -49,6 +52,7 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -130,6 +134,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         });
 
         llenarDetalle();
+        crearCanalNotificacion();
     }
 
 
@@ -163,13 +168,15 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, NotificacionAlarma.class);
                     intent.putExtra("nombreMed", nombreMed);
                     intent.putExtra("idDetalle", idDetalleReceta);
+                    intent.setAction("dispara");
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     Calendar calender= Calendar.getInstance();
 
                     calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
                     calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
-                    calender.set(Calendar.SECOND, 0);
+                    Random random = new Random();
+                    calender.set(Calendar.SECOND, random.nextInt(10 - 1)+1);
                     calender.set(Calendar.MILLISECOND, 0);
                     calender.set(Calendar.DAY_OF_WEEK, diasSeleccionados.get(i));  //here pass week number
 
@@ -195,13 +202,15 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, NotificacionAlarma.class);
                 intent.putExtra("nombreMed", nombreMed);
                 intent.putExtra("idDetalle", idDetalleReceta);
+                intent.setAction("dispara");
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Calendar calender= Calendar.getInstance();
 
                 calender.set(Calendar.HOUR_OF_DAY, horaAlarma);  //pass hour which you have select
                 calender.set(Calendar.MINUTE, minutoAlarma);  //pass min which you have select
-                calender.set(Calendar.SECOND, 0);
+                Random random = new Random();
+                calender.set(Calendar.SECOND, random.nextInt(10 - 1)+1);
                 calender.set(Calendar.MILLISECOND, 0);
 
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calender.getTimeInMillis(), 1000 * 60 * 60 * horaRepetir , pendingIntent);
@@ -271,7 +280,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     }
 
     public void llenarDetalle(){
-        idDetalleReceta = "1";
+        //idDetalleReceta = "1";
 
         String url ="http://"+ip+":8000/api/detalleReceta/"+idDetalleReceta;
 
@@ -451,6 +460,20 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         cbViernes.setClickable(true);
         cbSabado.setClickable(true);
         cbDomingo.setClickable(true);
+    }
+
+    private void crearCanalNotificacion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            //Nombre del canal
+            CharSequence  name = "MEDINFO";
+
+            //Instancia para gestionar el canal y el servicio de la notificación
+            NotificationChannel notificationChannel = new NotificationChannel("MEDINFO",name,
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
 }

@@ -23,14 +23,26 @@
         android:textSize="34sp"
         android:textStyle="bold|italic" />
 
+    <TextView
+        android:id="@+id/tvVacio"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No tienes recetas registradas  \n registra una nueva desde nuestra página web \n www.medinfo.com.mx"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <Button
         android:id="@+id/btnRecetas"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/azul_oscuro"
+        android:onClick="hstRecetas"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="Todas mis recetas"
@@ -40,26 +52,25 @@
     <ListView
         android:id="@+id/lvHstRecetas"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/et_border" />
+        android:layout_height="220dp"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/btnMedicamentos"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/azul_oscuro"
         android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/azul_oscuro"
+        android:onClick="hstDetalles"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="Todos mis medicamentos"
         android:textColor="@color/white"
-        android:layout_marginBottom="10dp"
         android:textSize="20sp" />
 
     <ListView
         android:id="@+id/lvHstMedicamentos"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/et_border" />
+        android:layout_height="220dp" />
 </LinearLayout>

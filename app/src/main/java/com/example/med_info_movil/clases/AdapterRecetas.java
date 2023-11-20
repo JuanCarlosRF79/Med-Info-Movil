@@ -60,10 +60,13 @@ public class AdapterRecetas extends BaseAdapter {
             tvMedicamentos.setText(object.getString( "nombreMedicamento") );
             tvInicio.setText("Inicio tratamiento: "+formatofecha.obtenerFecha( object.getString("inicioReceta") ));
 
-            // SI DA ERROR, QUIZÁ ES POR ESTO, ESPABILA JUAN CARLOS RÁPIDO
-            if (object.getString("finReceta") != "null"){
+
+            if (!object.isNull("finReceta")){
                 tvInicio.setText("Fin del tratamiento: "+formatofecha.obtenerFecha( object.getString("finReceta") ));
-            }tvFin.setVisibility(view.INVISIBLE);
+            }else {
+                tvFin.setHeight(0);
+                tvFin.setWidth(0);
+            }
 
             if (object.getString("estadoReceta")=="Activo"){
                 tvEstado.setText("Activo");

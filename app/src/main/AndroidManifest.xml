@@ -38,7 +38,12 @@
 
         <receiver
             android:name=".clases.NotificacionAlarma"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="dispara"/>
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".crearReceta"
@@ -59,7 +64,8 @@
             android:exported="false" />
         <activity
             android:name=".RecetasActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".PerfilActivity"
             android:exported="false" />
