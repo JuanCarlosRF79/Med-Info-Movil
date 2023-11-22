@@ -2,6 +2,8 @@ package com.example.med_info_movil;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -69,7 +72,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
     private ArrayList<Integer> diasSeleccionados = new ArrayList<Integer>();
 
     //Elementos de BD
-    private String idDetalleReceta, nombreMed, ip="";
+    private String idDetalleReceta="", nombreMed="", ip="";
     private int horaRepetir;
     private Bitmap bitmap;
     private byte[] bArray;
@@ -138,6 +141,7 @@ public class DetalleRecetaActivity extends AppCompatActivity {
             }
         });
 
+        crearCanalNotificacion();
         llenarDetalle();
     }
 
@@ -172,8 +176,8 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, NotificacionAlarma.class);
                     intent.putExtra("nombreMed", nombreMed);
                     intent.putExtra("idDetalle", idDetalleReceta);
-                    intent.setAction("dispara");
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                    //intent.setAction("dispara");
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, _id, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
                     AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                     Calendar calender= Calendar.getInstance();
 
@@ -206,8 +210,8 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, NotificacionAlarma.class);
                 intent.putExtra("nombreMed", nombreMed);
                 intent.putExtra("idDetalle", idDetalleReceta);
-                intent.setAction("dispara");
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                //intent.setAction("dispara");
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, _id, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Calendar calender= Calendar.getInstance();
 
@@ -321,6 +325,12 @@ public class DetalleRecetaActivity extends AppCompatActivity {
                                 tvDuracion.setText(object.getString("duracionTratamiento").toString());
                             }else {
                                 tvDuracion.setText("");
+                            }
+
+                            if (!object.isNull("viaAdministracion")){
+                                if (object.getInt("viaAdministracion")==1)tvViaAdmin.setText("Vía de administración: Oral");
+                                if (object.getInt("viaAdministracion")==2)tvViaAdmin.setText("Vía de administración: Subcutánea");
+                                if (object.getInt("viaAdministracion")==3)tvViaAdmin.setText("Vía de administración: Inhalatoria");
                             }
 
                             if (!object.getString("imgMedicamento").toString().equals("null")){
@@ -470,6 +480,20 @@ public class DetalleRecetaActivity extends AppCompatActivity {
         cbViernes.setClickable(true);
         cbSabado.setClickable(true);
         cbDomingo.setClickable(true);
+    }
+
+    private void crearCanalNotificacion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            //Nombre del canal
+            CharSequence  name = "MEDINFO";
+
+            //Instancia para gestionar el canal y el servicio de la notificación
+            NotificationChannel notificationChannel = new NotificationChannel("MEDINFO",name,
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            NotificationManager notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
 }

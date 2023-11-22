@@ -39,11 +39,7 @@
         <receiver
             android:name=".clases.NotificacionAlarma"
             android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="dispara"/>
-            </intent-filter>
-        </receiver>
+            android:exported="false"/>
 
         <activity
             android:name=".crearReceta"

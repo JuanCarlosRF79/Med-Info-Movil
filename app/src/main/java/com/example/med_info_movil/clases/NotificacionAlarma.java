@@ -22,17 +22,21 @@ import com.example.med_info_movil.R;
 public class NotificacionAlarma extends BroadcastReceiver {
     private final static String CHANNEL_ID = "MEDINFO"; //constante para canal de notificación
     private String titulo = "";
-    private String idDetalle;
+    private String idDetalle = "";
     private PendingIntent pendingIntentSi, pendingIntentNo;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         idDetalle = intent.getStringExtra("idDetalle");
         titulo = intent.getStringExtra("nombreMed");
-        crearNotificacion(context);
+        intent.removeExtra("idDetalle");
+        intent.removeExtra("nombreMed");
+
+        //crearCanalNotificacion(context);
         setPendingIntentSi(context);
         setPendingIntentNo(context);
         crearNotificacion(context);
+        idDetalle = ""; titulo = "";
     }
 
     public void crearNotificacion(Context context){
