@@ -1,12 +1,15 @@
 package com.example.med_info_movil.clases;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -26,6 +29,7 @@ public class NotificacionAlarma extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         idDetalle = intent.getStringExtra("idDetalle");
         titulo = intent.getStringExtra("nombreMed");
+        crearNotificacion(context);
         setPendingIntentSi(context);
         setPendingIntentNo(context);
         crearNotificacion(context);
@@ -49,8 +53,8 @@ public class NotificacionAlarma extends BroadcastReceiver {
         builder.setContentIntent(pendingIntentSi);
 
         //Se agregan las opciones que aparecen en la notificación
-        builder.addAction(R.drawable.baseline_thumb_up_24, "Si", pendingIntentSi);
-        builder.addAction(R.drawable.baseline_thumb_down_24, "No", pendingIntentNo);
+        builder.addAction(R.drawable.baseline_thumb_up_24, "Mostrar información", pendingIntentSi);
+        builder.addAction(R.drawable.baseline_thumb_down_24, "Ménu principal", pendingIntentNo);
 
         //Instancia que gestiona la notificación con el dispositivo
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
@@ -78,6 +82,20 @@ public class NotificacionAlarma extends BroadcastReceiver {
         stackBuilder.addNextIntent(intent);
 
         pendingIntentSi = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_CANCEL_CURRENT);
+    }
+
+    private void crearCanalNotificacion(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            //Nombre del canal
+            CharSequence  name = "MEDINFO";
+
+            //Instancia para gestionar el canal y el servicio de la notificación
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,name,
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
 }
