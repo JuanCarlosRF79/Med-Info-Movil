@@ -55,13 +55,13 @@
         android:id="@+id/gContra"
         android:layout_width="300dp"
         android:layout_height="48dp"
+        android:layout_gravity="center"
         android:layout_marginBottom="20dp"
         android:background="@color/white"
         android:elevation="20sp"
-        android:layout_gravity="center"
         android:ems="10"
         android:hint="Contraseña"
-        android:inputType="text"
+        android:inputType="text|textPassword"
         android:paddingLeft="5dp"
         android:shadowRadius="1" />
 

@@ -2,6 +2,7 @@ package com.example.med_info_movil.ui.home;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,9 +60,12 @@ public class HomeFragment extends Fragment {
         lvDetalles = view.findViewById(R.id.lvMedicamentos);
         lvReceta = view.findViewById(R.id.lvReceta);
         tvVacio = view.findViewById(R.id.tvVacio);
+        btnFamiliar = view.findViewById(R.id.btnFamiliar);
+        btn911 = view.findViewById(R.id.btn911);
 
         SharedPreferences preferences = view.getContext().getSharedPreferences("medinfo.dat",0);
         ip = preferences.getString("ip",ip);
+
 
         llenarReceta();
 
@@ -86,6 +90,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btn911.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeCall911();
+            }
+        });
+
+        btnFamiliar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeCallFamiliar();
+            }
+        });
+
         return view;
     }
 
@@ -93,6 +111,21 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void makeCallFamiliar(){
+        String phoneNumber = view.getContext()
+                .getSharedPreferences("medinfo.dat",0).getString("numTel","");
+        if (phoneNumber.isEmpty()){
+            Toast.makeText(view.getContext(), "Primero asigna un número de telefono", Toast.LENGTH_SHORT).show();
+        }else {
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNumber)));
+        }
+    }
+
+    private void makeCall911(){
+        String phoneNumber ="911";
+        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNumber)));
     }
 
     private void llenarReceta(){

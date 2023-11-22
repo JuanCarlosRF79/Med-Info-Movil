@@ -2,6 +2,7 @@ package com.example.med_info_movil.ui.notifications;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.med_info_movil.R;
 import com.example.med_info_movil.clases.enfermedadesCronicas;
 import com.example.med_info_movil.databinding.FragmentNotificationsBinding;
+import com.example.med_info_movil.loginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +50,7 @@ public class NotificationsFragment extends Fragment {
     private ImageButton btnCopiar;
     private Button btnEnfermedad,btnMedicamento,btnAceptar,btnCerar;
     private Spinner spnEnfermedad;
-    private String ip,numTel;
+    private String ip,numTel="";
     private com.example.med_info_movil.clases.enfermedadesCronicas enfermedadesCronicas;
 
 
@@ -57,6 +59,7 @@ public class NotificationsFragment extends Fragment {
         view =inflater.inflate(R.layout.fragment_notifications,container,false);
         SharedPreferences preferences = view.getContext().getSharedPreferences("medinfo.dat",0);
         ip = preferences.getString("ip",ip);
+        numTel = preferences.getString("numTel",numTel);
 
         tvNombres = view.findViewById(R.id.tvNombres);
         tvEdad = view.findViewById(R.id.tvEdad);
@@ -76,6 +79,8 @@ public class NotificationsFragment extends Fragment {
         spnEnfermedad = view.findViewById(R.id.spnEnfermedades);
 
         enfermedadesCronicas = new enfermedadesCronicas();
+
+        etNum.setText(numTel);
 
         ArrayAdapter<String> adapter;
         spnEnfermedad.setAdapter(adapter = new ArrayAdapter<String>(view.getContext(),
@@ -109,6 +114,19 @@ public class NotificationsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 actualizarDatos();
+            }
+        });
+
+        btnCerar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences1 = view.getContext().getSharedPreferences("medinfo.dat",0);
+                SharedPreferences.Editor editor = preferences1.edit();
+                editor.remove("idPaciente");
+                editor.apply();
+
+                Intent intent = new Intent(view.getContext(), loginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -228,6 +246,13 @@ public class NotificationsFragment extends Fragment {
             SharedPreferences preferences = view.getContext().getSharedPreferences("medinfo.dat",0);
             String idPac = String.valueOf(preferences.getInt("idPaciente",0));
 
+            if (!etNum.getText().toString().isEmpty()){
+                SharedPreferences preferences1 = view.getContext().getSharedPreferences("medinfo.dat",0);
+                SharedPreferences.Editor editor = preferences1.edit();
+                editor.putString("numTel",etNum.getText().toString());
+                editor.apply();
+            }
+
             params.put("idPaciente",idPac);
 
             if (!tvEnfermedades.getText().toString().isEmpty()){
@@ -235,7 +260,7 @@ public class NotificationsFragment extends Fragment {
             }
 
             if (!tvAlergias.getText().toString().isEmpty()){
-                params.put("medicamentos",tvAlergias.getText().toString());
+                params.put("alergias",tvAlergias.getText().toString());
             }
 
             return params;
