@@ -76,7 +76,7 @@ class loginActivity : AppCompatActivity() {
 
     private fun makePhoneCall() {
         //3320294024
-        val phoneNumber = "tel:" + "3320452252" // Reemplaza con el número al que deseas llamar
+        val phoneNumber = "tel:" + "911" // Reemplaza con el número al que deseas llamar
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), REQUEST_CALL_PHONE)

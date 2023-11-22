@@ -59,7 +59,6 @@ public class DashboardFragment extends Fragment {
         btnDetalle = view.findViewById(R.id.btnMedicamentos);
         btnReceta = view.findViewById(R.id.btnRecetas);
 
-
         SharedPreferences preferences = view.getContext().getSharedPreferences("medinfo.dat",0);
         ip = preferences.getString("ip",ip);
 
@@ -145,12 +144,14 @@ public class DashboardFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(view.getContext(), "Ha ocurrido un error = " + error, Toast.LENGTH_LONG).show();
+                //Toast.makeText(view.getContext(), "Ha ocurrido un error = " + error, Toast.LENGTH_LONG).show();
                 ViewGroup.LayoutParams params = lvRecetas.getLayoutParams();
                 params.height=0;
                 params.width=0;
                 lvRecetas.setLayoutParams(params);
                 lvDetalles.setLayoutParams(params);
+                btnDetalle.setVisibility(View.INVISIBLE);
+                btnReceta.setVisibility(View.INVISIBLE);
             }
         }){ @Nullable
         @Override

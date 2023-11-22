@@ -1,7 +1,9 @@
 package com.example.med_info_movil.ui.home;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
@@ -119,13 +122,36 @@ public class HomeFragment extends Fragment {
         if (phoneNumber.isEmpty()){
             Toast.makeText(view.getContext(), "Primero asigna un número de telefono", Toast.LENGTH_SHORT).show();
         }else {
-            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNumber)));
+            if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
+            } else {
+                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNumber)));
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode==1){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                makeCallFamiliar();
+            }
+        }
+        if (requestCode==2){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                makeCall911();
+            }
         }
     }
 
     private void makeCall911(){
         String phoneNumber ="911";
-        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNumber)));
+        if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 2);
+        } else {
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+phoneNumber)));
+        }
     }
 
     private void llenarReceta(){
@@ -161,7 +187,7 @@ public class HomeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(view.getContext(), "Ha ocurrido un error = " + error, Toast.LENGTH_LONG).show();
+                //Toast.makeText(view.getContext(), "Ha ocurrido un error = " + error, Toast.LENGTH_LONG).show();
                 ViewGroup.LayoutParams params = layout.getLayoutParams();
                 params.height=0;
                 params.width=0;
