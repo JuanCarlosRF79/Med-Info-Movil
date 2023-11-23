@@ -146,7 +146,10 @@ public class RecetasActivity extends AppCompatActivity {
 
                     if (receta.isNull("idDoctor")){
                         tvNombreDoc.setWidth(0); tvNombreDoc.setHeight(0);
+                    }else{
+                        tvNombreDoc.setText("Nombre del doctor: "+object.getString("doctor"));
                     }
+
                     tvinicio.setText("Inicio: "+formatofecha.obtenerFecha(receta.getString("inicioReceta")) );
 
                     if (!receta.isNull("finReceta")){

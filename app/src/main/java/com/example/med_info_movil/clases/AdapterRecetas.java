@@ -62,7 +62,7 @@ public class AdapterRecetas extends BaseAdapter {
 
 
             if (!object.isNull("finReceta")){
-                tvInicio.setText("Fin del tratamiento: "+formatofecha.obtenerFecha( object.getString("finReceta") ));
+                tvFin.setText("Fin del tratamiento: "+formatofecha.obtenerFecha( object.getString("finReceta") ));
             }else {
                 tvFin.setHeight(0);
                 tvFin.setWidth(0);

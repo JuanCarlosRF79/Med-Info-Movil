@@ -52,7 +52,7 @@
     <ListView
         android:id="@+id/lvHstRecetas"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="247dp"
         android:layout_marginBottom="20dp" />
 
     <Button
@@ -72,5 +72,5 @@
     <ListView
         android:id="@+id/lvHstMedicamentos"
         android:layout_width="match_parent"
-        android:layout_height="220dp" />
+        android:layout_height="210dp" />
 </LinearLayout>
